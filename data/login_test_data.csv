@@ -1,0 +1,5 @@
+username,password,expected_error_snippet
+,,username is required
+standard_user,,password is required
+not_a_real_user,wrong_password,do not match
+locked_out_user,secret_sauce,locked out
