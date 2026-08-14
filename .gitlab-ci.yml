@@ -1,0 +1,31 @@
+# GitLab CI configuration.
+# Note: this repo is hosted on GitHub, so this file won't actually run here —
+# it's included to demonstrate GitLab CI/CD pipeline authoring.
+# To use it for real, mirror this repo to GitLab (or push it there directly);
+# GitLab will pick this file up automatically.
+
+image: python:3.11-slim
+
+stages:
+  - test
+
+before_script:
+  - apt-get update -qq && apt-get install -y -qq wget gnupg
+  - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+  - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+  - apt-get update -qq && apt-get install -y -qq google-chrome-stable
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+run_tests:
+  stage: test
+  script:
+    - pytest --html=report.html --self-contained-html
+  artifacts:
+    when: always
+    paths:
+      - report.html
+    expire_in: 1 week
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

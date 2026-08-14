@@ -44,7 +44,13 @@ Chrome is required; [webdriver-manager](https://pypi.org/project/webdriver-manag
 
 ## Continuous Integration
 
-Every push to `main` triggers a GitHub Actions workflow that installs dependencies, runs the full suite headlessly, and publishes the HTML report as a build artifact. See `.github/workflows/tests.yml`.
+This repo includes working pipeline configuration for **three** CI systems, to demonstrate the same test suite running across different tooling:
+
+- **GitHub Actions** (`.github/workflows/tests.yml`) — active on this repo. Every push to `main` installs dependencies, runs the full suite headlessly, and publishes the HTML report as a build artifact.
+- **GitLab CI** (`.gitlab-ci.yml`) — ready to run if this repo is mirrored or pushed to GitLab; GitLab picks the file up automatically.
+- **Jenkins** (`Jenkinsfile`) — a declarative pipeline ready to be pointed at from a Jenkins "Pipeline script from SCM" job.
+
+All three run the identical command (`pytest --html=report.html --self-contained-html`) — only the environment setup and artifact-publishing syntax differs between platforms.
 
 ## Possible extensions
 
